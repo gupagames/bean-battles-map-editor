@@ -19,8 +19,35 @@ namespace GG.BeanBattles.MapEditor
         [HideInInspector] public EditorMapSpawnPoint[] VehicleSpawns;
         [HideInInspector] public EditorMapSpawnPoint[] WeaponSpawns;
 
+        // assigned on export
+        [HideInInspector] public EditorMapSpawnPoint DefaultCamera;
+        [HideInInspector] public EditorMapSpawnPoint WinnerStand;
+
         public void AssignSpawns()
         {
+            // get default camera and winner stand
+            EditorMapDefaultCamera defaultCamera = FindObjectOfType<EditorMapDefaultCamera>();
+
+            if (defaultCamera != null)
+            {
+                DefaultCamera = new EditorMapSpawnPoint() 
+                { 
+                    Position = defaultCamera.transform.position, 
+                    Rotation = defaultCamera.transform.rotation 
+                };
+            }
+
+            EditorMapWinnerStand winnerStand = FindObjectOfType<EditorMapWinnerStand>();
+
+            if (winnerStand != null)
+            {
+                WinnerStand = new EditorMapSpawnPoint()
+                {
+                    Position = winnerStand.transform.position,
+                    Rotation = winnerStand.transform.rotation
+                };
+            }
+
             // Get map spawns (weapon / vehcle)
             List<EditorMapSpawnPoint> vehicleSpawns = new List<EditorMapSpawnPoint>();
             List<EditorMapSpawnPoint> weaponSpawns = new List<EditorMapSpawnPoint>();
@@ -97,10 +124,13 @@ namespace GG.BeanBattles.MapEditor
 
         private void OnDrawGizmosSelected()
         {
+            Color color = Color.cyan;
             foreach (var stage in Stages)
             {
                 Gizmos.color = Color.cyan;
                 Gizmos.DrawWireCube(stage.ZoneOffset, stage.ZoneSize);
+
+                EditorMapGizmos.DrawSpawn(stage.ZoneOffset, Quaternion.identity, stage.ZoneSize, Vector3.zero, color, $"Stage {stage.DisplayName}", Vector3.zero);
             }
         }
     }

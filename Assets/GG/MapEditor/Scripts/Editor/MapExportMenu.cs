@@ -19,6 +19,13 @@ namespace GG.BeanBattles.MapEditor
             EditorUtility.RevealInFinder(MapEditorPaths.EditorMapsPath);
         }
 
+
+        [MenuItem("GG/Map Editor/Create Map")]
+        public static void CreateMap()
+        {
+
+        }
+
         [MenuItem("GG/Map Editor/Validate Map")]
         public static void ValidateMap()
         {
@@ -47,20 +54,7 @@ namespace GG.BeanBattles.MapEditor
             ExportMap(settings);
         }
 
-        [MenuItem("GG/Map Editor/Upload Map")]
-        public static void UploadMap()
-        {
-            EditorMapSettings settings = UnityEngine.Object.FindObjectOfType<EditorMapSettings>();
-            if (settings == null) { Debug.LogError("Failed to upload map, no MapSettings found."); return; }
-
-            settings.AssignSpawns();
-
-            ExportMap(settings);
-
-            Debug.Log("TODO: Upload map to Steam Workshop");
-        }
-
-        private static void ExportMap(EditorMapSettings settings)
+        private static string ExportMap(EditorMapSettings settings)
         {
             Scene currentScene = EditorSceneManager.GetActiveScene();
             ZipConstants.DefaultCodePage = 65001;
@@ -68,13 +62,13 @@ namespace GG.BeanBattles.MapEditor
             if (string.IsNullOrEmpty(currentScene.path))
             {
                 Debug.LogError("Scene must be saved before exporting.");
-                return;
+                return "";
             }
 
             if (!EditorMapValidation.ValidateMap())
             {
                 Debug.LogError("Failed to export map, validation failed.");
-                return;
+                return "";
             }
 
             // used to assign version
@@ -85,7 +79,7 @@ namespace GG.BeanBattles.MapEditor
             if (version < 1)
             {
                 Debug.LogError("Failed to get editor version.");
-                return;
+                return "";
             }
 
             string tempMapPath = Path.Combine(MapEditorPaths.EditorMapsCachePath, settings.MapName);
@@ -106,7 +100,7 @@ namespace GG.BeanBattles.MapEditor
                 assetNames = new[] { currentScene.path }
             };
 
-            BuildPipeline.BuildAssetBundles( rawPath, new[] { build }, BuildAssetBundleOptions.None, BuildTarget.StandaloneWindows64);
+            BuildPipeline.BuildAssetBundles(rawPath, new[] { build }, BuildAssetBundleOptions.None, BuildTarget.StandaloneWindows64);
 
             string builtBundlePath = Path.Combine(rawPath, "bbmapbundle");
             string finalBundlePath = Path.Combine(buildPath, "map.bundle");
@@ -151,6 +145,8 @@ namespace GG.BeanBattles.MapEditor
             Debug.Log("Exported bbmap: " + zipPath);
 
             EditorUtility.RevealInFinder(zipPath);
+
+            return zipPath;
         }
     }
 }
