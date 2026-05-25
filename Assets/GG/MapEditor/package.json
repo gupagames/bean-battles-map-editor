@@ -1,0 +1,12 @@
+{
+  "name": "com.beanbattles.mapeditor",
+  "version": "1.0",
+  "displayName": "Bean Battles Map Editor",
+  "description": "Runtime and editor system for creating, exporting, and loading custom Bean Battles maps.",
+  "unity": "2017.2,3",
+  "author": {
+    "name": "Duck, flarfo",
+    "email": "duck@gupagames.com",
+    "url": "https://gupagames.com"
+  }
+}

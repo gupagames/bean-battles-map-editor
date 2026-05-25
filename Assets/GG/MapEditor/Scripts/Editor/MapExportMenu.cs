@@ -10,6 +10,8 @@ namespace GG.BeanBattles.MapEditor
 {
     public static class MapExporterMenu
     {
+        private static string _packagePath = Application.dataPath + "/GG/MapEditor/package.json";
+
         [MenuItem("GG/Show EditorMaps on Disk")]
         public static void OpenPersistentData()
         {
@@ -22,6 +24,8 @@ namespace GG.BeanBattles.MapEditor
         {
             EditorMapSettings settings = UnityEngine.Object.FindObjectOfType<EditorMapSettings>();
             if (settings == null) { Debug.LogError("Failed to validate map, no MapSettings found."); return; }
+
+            settings.AssignSpawns();
 
             if (!EditorMapValidation.ValidateMap())
             {
@@ -38,6 +42,8 @@ namespace GG.BeanBattles.MapEditor
             EditorMapSettings settings = UnityEngine.Object.FindObjectOfType<EditorMapSettings>();
             if (settings == null) { Debug.LogError("Failed to export map, no MapSettings found."); return; }
 
+            settings.AssignSpawns();
+
             ExportMap(settings);
         }
 
@@ -47,6 +53,8 @@ namespace GG.BeanBattles.MapEditor
             EditorMapSettings settings = UnityEngine.Object.FindObjectOfType<EditorMapSettings>();
             if (settings == null) { Debug.LogError("Failed to upload map, no MapSettings found."); return; }
 
+            settings.AssignSpawns();
+
             ExportMap(settings);
 
             Debug.Log("TODO: Upload map to Steam Workshop");
@@ -55,6 +63,7 @@ namespace GG.BeanBattles.MapEditor
         private static void ExportMap(EditorMapSettings settings)
         {
             Scene currentScene = EditorSceneManager.GetActiveScene();
+            ZipConstants.DefaultCodePage = 65001;
 
             if (string.IsNullOrEmpty(currentScene.path))
             {
@@ -65,6 +74,17 @@ namespace GG.BeanBattles.MapEditor
             if (!EditorMapValidation.ValidateMap())
             {
                 Debug.LogError("Failed to export map, validation failed.");
+                return;
+            }
+
+            // used to assign version
+            string versionJson = File.ReadAllText(_packagePath);
+            MapEditorPackage package = JsonUtility.FromJson<MapEditorPackage>(versionJson);
+            float version = -1f; float.TryParse(package.version, out version);
+
+            if (version < 1)
+            {
+                Debug.LogError("Failed to get editor version.");
                 return;
             }
 
@@ -97,13 +117,25 @@ namespace GG.BeanBattles.MapEditor
             {
                 MapName = settings.MapName,
                 Description = settings.Description,
-                SceneName = currentScene.name,
-                EditorVersion = settings.EditorVersion
+                EditorVersion = version,
+                Stages = new EditorMapStageMetaData[settings.Stages.Length]
             };
 
-            string json = JsonUtility.ToJson(metadata, true);
+            for (int i = 0; i < metadata.Stages.Length; i++)
+            {
+                EditorMapStage mapStage = settings.Stages[i];
 
-            File.WriteAllText(Path.Combine(buildPath, "map.json"), json);
+                metadata.Stages[i] = new EditorMapStageMetaData()
+                {
+                    DisplayName = mapStage.DisplayName,
+                    Width = mapStage.ZoneSize.x,
+                    Depth = mapStage.ZoneSize.z,
+                };
+            }
+
+            string metaJson = JsonUtility.ToJson(metadata, true);
+
+            File.WriteAllText(Path.Combine(buildPath, "map.json"), metaJson);
 
             if (settings.PreviewImage != null)
             {

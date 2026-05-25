@@ -5,9 +5,18 @@ namespace GG.BeanBattles.MapEditor
     [Serializable]
     public class EditorMapMetaData
     {
+        public float EditorVersion;
+
         public string MapName;
         public string Description;
-        public string SceneName;
-        public int EditorVersion;
+        public EditorMapStageMetaData[] Stages;
+    }
+
+    [Serializable]
+    public class EditorMapStageMetaData
+    {
+        public string DisplayName;
+        public int Width;
+        public int Depth;
     }
 }
