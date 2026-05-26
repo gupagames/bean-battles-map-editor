@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace GG.BeanBattles.MapEditor
@@ -6,6 +7,13 @@ namespace GG.BeanBattles.MapEditor
     public class EditorMapSettings : EditorMapBehaviour
     {
         // VERSION 1
+        [ShowOnly] public string Id;
+        [ShowOnly] public string SteamItemId;
+        [ShowOnly] public string SteamAuthorId;
+
+        [ShowOnly] public string CreationDate;
+        [ShowOnly] public string LastUpdate;
+
         public string MapName = "new-map";
         public string Author = "";
         public string Description = "";
@@ -22,6 +30,12 @@ namespace GG.BeanBattles.MapEditor
         // assigned on export
         [HideInInspector] public EditorMapSpawnPoint DefaultCamera;
         [HideInInspector] public EditorMapSpawnPoint WinnerStand;
+
+        public void GenerateMapId()
+        {
+            Id = Guid.NewGuid().ToString();
+            CreationDate = DateTime.UtcNow.ToString("O");
+        }
 
         public void AssignSpawns()
         {

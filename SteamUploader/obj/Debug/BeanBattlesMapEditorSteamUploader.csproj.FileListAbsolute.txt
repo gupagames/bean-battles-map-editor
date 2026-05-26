@@ -1,0 +1,10 @@
+C:\GG\Unity\Projects\bean-battles-map-editor\Assets\GG\SteamUploader\BeanBattlesMapEditorSteamUploader\bin\Debug\BeanBattlesMapEditorSteamUploader.exe.config
+C:\GG\Unity\Projects\bean-battles-map-editor\Assets\GG\SteamUploader\BeanBattlesMapEditorSteamUploader\bin\Debug\BeanBattlesMapEditorSteamUploader.exe
+C:\GG\Unity\Projects\bean-battles-map-editor\Assets\GG\SteamUploader\BeanBattlesMapEditorSteamUploader\bin\Debug\BeanBattlesMapEditorSteamUploader.pdb
+C:\GG\Unity\Projects\bean-battles-map-editor\Assets\GG\SteamUploader\BeanBattlesMapEditorSteamUploader\bin\Debug\Steamworks.NET.dll
+C:\GG\Unity\Projects\bean-battles-map-editor\Assets\GG\SteamUploader\BeanBattlesMapEditorSteamUploader\obj\Debug\BeanBattlesMapEditorSteamUploader.csproj.AssemblyReference.cache
+C:\GG\Unity\Projects\bean-battles-map-editor\Assets\GG\SteamUploader\BeanBattlesMapEditorSteamUploader\obj\Debug\BeanBattlesMapEditorSteamUploader.csproj.CoreCompileInputs.cache
+C:\GG\Unity\Projects\bean-battles-map-editor\Assets\GG\SteamUploader\BeanBattlesMapEditorSteamUploader\obj\Debug\BeanBatt.4AE22B47.Up2Date
+C:\GG\Unity\Projects\bean-battles-map-editor\Assets\GG\SteamUploader\BeanBattlesMapEditorSteamUploader\obj\Debug\BeanBattlesMapEditorSteamUploader.exe
+C:\GG\Unity\Projects\bean-battles-map-editor\Assets\GG\SteamUploader\BeanBattlesMapEditorSteamUploader\obj\Debug\BeanBattlesMapEditorSteamUploader.pdb
+C:\GG\Unity\Projects\bean-battles-map-editor\Assets\GG\SteamUploader\BeanBattlesMapEditorSteamUploader\obj\Debug\BeanBattlesMapEditorSteamUploader.exe.config

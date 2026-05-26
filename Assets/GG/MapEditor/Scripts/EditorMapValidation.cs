@@ -12,7 +12,8 @@ namespace GG.BeanBattles.MapEditor
             typeof(MeshFilter),
             typeof(Collider),
             typeof(Light),
-            typeof(EditorMapBehaviour)
+            typeof(EditorMapBehaviour),
+            typeof(Tree)
         };
 
         public static bool ValidateMap()
