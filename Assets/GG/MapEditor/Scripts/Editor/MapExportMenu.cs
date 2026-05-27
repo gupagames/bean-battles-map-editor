@@ -1,7 +1,6 @@
 ﻿using ICSharpCode.SharpZipLib.Zip;
 using System;
 using System.IO;
-using System.Threading.Tasks;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -24,7 +23,7 @@ namespace GG.BeanBattles.MapEditor
 
         [MenuItem("GG/Map Editor/Create New Map")]
         public static void CreateMap()
-        {            
+        {
             // make unique if already exists
             string newScenePath = "Assets/New Map.unity";
             newScenePath = AssetDatabase.GenerateUniqueAssetPath(newScenePath);
@@ -118,7 +117,7 @@ namespace GG.BeanBattles.MapEditor
             UploadToSteamWorkshop(path, settings);
         }
 
-        private static string ExportMap(EditorMapSettings settings, bool zip)
+        private static string ExportMap(EditorMapSettings settings, bool bbMap)
         {
             Scene currentScene = EditorSceneManager.GetActiveScene();
             ZipConstants.DefaultCodePage = 65001;
@@ -175,7 +174,7 @@ namespace GG.BeanBattles.MapEditor
             File.Copy(builtBundlePath, finalBundlePath, true);
 
             // hash for map accuracy
-            string hashInput =  Convert.ToBase64String(File.ReadAllBytes(finalBundlePath));
+            string hashInput = Convert.ToBase64String(File.ReadAllBytes(finalBundlePath));
             string mapHash = ComputeSHA256(hashInput);
 
             EditorMapMetaData metadata = new EditorMapMetaData
@@ -188,8 +187,10 @@ namespace GG.BeanBattles.MapEditor
                 MapId = settings.Id,
                 MapHash = mapHash,
 
-                SteamItemId = settings.SteamItemId,
-                SteamAuthorId = settings.SteamAuthorId,
+                // local maps don't include steam info, we dont want to install an outdate map
+                // but still keep these on the settings, so if we update to steam, keep connection
+                SteamItemId = bbMap ? "" : settings.SteamItemId,
+                SteamAuthorId = bbMap ? "" : settings.SteamAuthorId,
 
                 LastUpdate = settings.LastUpdate,
                 CreationDate = settings.CreationDate,
@@ -221,7 +222,7 @@ namespace GG.BeanBattles.MapEditor
 
             Directory.Delete(rawPath, true);
 
-            if (zip)
+            if (bbMap)
             {
                 FastZip fastZip = new FastZip();
                 fastZip.CreateZip(zipPath, cacheMapPath, true, null);

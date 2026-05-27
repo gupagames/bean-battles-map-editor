@@ -104,3 +104,8 @@ InitTestScene*.unity*
 
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
+
+# ignore everything in assets besides GG folder / so users can make maps and contriubte as well
+/[Aa]ssets/*
+!/[Aa]ssets/GG
+!/[Aa]ssets/GG/**
