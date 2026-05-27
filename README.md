@@ -1,6 +1,6 @@
 # bean-battles-map-editor
 
-A Unity-based map editor for Bean Battles.
+A Unity based map editor for Bean Battles.
 
 This project is in early development. More documentation coming soon 🛠️
 
