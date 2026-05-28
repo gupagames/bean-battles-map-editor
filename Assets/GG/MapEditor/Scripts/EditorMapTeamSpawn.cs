@@ -8,7 +8,6 @@ namespace GG.BeanBattles.MapEditor
 {
     public class EditorMapTeamSpawn : EditorMapBehaviour
     {
-        [Tooltip("Specifies which stage the team spawn should be used on.")]
         public int Stage = 0;
 
         private Vector3 _gizmoOffset = new Vector3(0, 0, 0);
