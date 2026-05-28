@@ -7,18 +7,26 @@ namespace GG.BeanBattles.MapEditor
     public class EditorMapSettings : EditorMapBehaviour
     {
         // VERSION 1
-        [ShowOnly] public string Id;
-        [ShowOnly] public string SteamItemId;
-        [ShowOnly] public string SteamAuthorId;
+        [ShowOnly("Your map's id in relation to bean battles.")] public string Id;
+        [ShowOnly("Steams way of determining which workshop map you are.(also called workshop id)")] public string SteamItemId;
+        [ShowOnly("Steams way of determining who made the map.")] public string SteamAuthorId;
 
-        [ShowOnly] public string CreationDate;
-        [ShowOnly] public string LastUpdate;
+        [ShowOnly("When the map was first created.")] public string CreationDate;
+        [ShowOnly("When the map was last changed.")] public string LastUpdate;
 
+        [Tooltip("What you want your map to be named.")]
         public string MapName = "new-map";
+        [Tooltip("Who is publishing the map.")]
         public string Author = "";
+        [Tooltip("Brief description of the map describing layout and recommended player size")]
         public string Description = "";
+        [Tooltip("An image of your map, prefered size 16x9 (ex 1280:720)\n\n" +
+            "To know if you have the correct image size the math is (9/16) * a = b\n\n" +
+            "Example (9/16) * 1280 = 720\n\n" +
+            "So the image would be 1280 x 720")]
         public Texture2D PreviewImage;
 
+        [Tooltip("How many stages you want")]
         public EditorMapStage[] Stages;
 
         // assigned on load with assignspawns
