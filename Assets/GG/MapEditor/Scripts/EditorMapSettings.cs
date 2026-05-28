@@ -1,24 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace GG.BeanBattles.MapEditor
 {
+    [CustomPropertyDrawer(typeof(ShowOnlyAttribute))]
+    public class ShowOnlyDrawer : PropertyDrawer
+    {
+        public override void OnGUI(
+            Rect position,
+            SerializedProperty property,
+            GUIContent label)
+        {
+            GUI.enabled = false;
+
+            EditorGUI.PropertyField(
+                position,
+                property,
+                label,
+                true
+            );
+
+            GUI.enabled = true;
+        }
+    }
     public class EditorMapSettings : EditorMapBehaviour
     {
         // VERSION 1
+        [Tooltip("Your map's id in relation to bean battles.")]
         [ShowOnly] public string Id;
+        [Tooltip("Steams way of determining which workshop map you are.(also called workshop id)")]
         [ShowOnly] public string SteamItemId;
+        [Tooltip("Steams way of determining who made the map.")]
         [ShowOnly] public string SteamAuthorId;
 
+        [Tooltip("When the map was first created.")]
         [ShowOnly] public string CreationDate;
+        [Tooltip("When the map was last changed.")]
         [ShowOnly] public string LastUpdate;
 
+        [Tooltip("What you want your map to be named.")]
         public string MapName = "new-map";
+        [Tooltip("Who is publishing the map.")]
         public string Author = "";
+        [Tooltip("Brief description of the map")]
         public string Description = "";
+        [Tooltip("An image that displays something cool about your map.")]
         public Texture2D PreviewImage;
-
+        [Tooltip("How many stages you want")]
         public EditorMapStage[] Stages;
 
         // assigned on load with assignspawns

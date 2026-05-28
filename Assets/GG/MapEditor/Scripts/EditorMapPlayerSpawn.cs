@@ -10,7 +10,10 @@ namespace GG.BeanBattles.MapEditor
 
     public class EditorMapPlayerSpawn : EditorMapBehaviour
     {
+        [Tooltip("Primary Spawns: Normal Spawns,\n\n"+
+                 "Secondary Spawns: Backup Player Spawns(if spawns are blocked/filled.)")]
         public PlayerSpawnType SpawnType = PlayerSpawnType.Primary;
+        [Tooltip("Specifies which stage the player spawn should be used on.")]
         public int Stage = 0;
 
         private Vector3 _gizmoOffset = new Vector3(0, 0, 0);
