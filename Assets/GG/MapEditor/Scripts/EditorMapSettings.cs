@@ -21,15 +21,15 @@ namespace GG.BeanBattles.MapEditor
 
         public EditorMapStage[] Stages;
 
-        // assigned on export
+        // assigned on load with assignspawns
         // these are only spawned inside the stage bounds
         // so we dont need to assign per stage
-        [HideInInspector] public EditorMapSpawnPoint[] VehicleSpawns;
-        [HideInInspector] public EditorMapSpawnPoint[] WeaponSpawns;
+        [NonSerialized] public EditorMapVehicleSpawn[] VehicleSpawns;
+        [NonSerialized] public EditorMapWeaponSpawn[] WeaponSpawns;
 
-        // assigned on export
-        [HideInInspector] public EditorMapSpawnPoint DefaultCamera;
-        [HideInInspector] public EditorMapSpawnPoint WinnerStand;
+        // assigned on load with assignspawns
+        [NonSerialized] public EditorMapDefaultCamera DefaultCamera;
+        [NonSerialized] public EditorMapWinnerStand WinnerStand;
 
         public void GenerateMapId()
         {
@@ -39,94 +39,30 @@ namespace GG.BeanBattles.MapEditor
 
         public void AssignSpawns()
         {
-            // get default camera and winner stand
-            EditorMapDefaultCamera defaultCamera = FindObjectOfType<EditorMapDefaultCamera>();
+            DefaultCamera = FindObjectOfType<EditorMapDefaultCamera>();
+            WinnerStand = FindObjectOfType<EditorMapWinnerStand>();
+            VehicleSpawns = FindObjectsOfType<EditorMapVehicleSpawn>();
+            WeaponSpawns = FindObjectsOfType<EditorMapWeaponSpawn>();
 
-            if (defaultCamera != null)
-            {
-                DefaultCamera = new EditorMapSpawnPoint() 
-                { 
-                    Position = defaultCamera.transform.position, 
-                    Rotation = defaultCamera.transform.rotation 
-                };
-            }
-
-            EditorMapWinnerStand winnerStand = FindObjectOfType<EditorMapWinnerStand>();
-
-            if (winnerStand != null)
-            {
-                WinnerStand = new EditorMapSpawnPoint()
-                {
-                    Position = winnerStand.transform.position,
-                    Rotation = winnerStand.transform.rotation
-                };
-            }
-
-            // Get map spawns (weapon / vehcle)
-            List<EditorMapSpawnPoint> vehicleSpawns = new List<EditorMapSpawnPoint>();
-            List<EditorMapSpawnPoint> weaponSpawns = new List<EditorMapSpawnPoint>();
-
-            EditorMapVehicleSpawn[] vehicleObjects = FindObjectsOfType<EditorMapVehicleSpawn>();
-
-            foreach (var spawn in vehicleObjects)
-            {
-                vehicleSpawns.Add(new EditorMapSpawnPoint
-                {
-                    Position = spawn.transform.position,
-                    Rotation = spawn.transform.rotation
-                });
-            }
-
-            EditorMapWeaponSpawn[] weaponObjects = FindObjectsOfType<EditorMapWeaponSpawn>();
-
-            foreach (var spawn in weaponObjects)
-            {
-                weaponSpawns.Add(new EditorMapSpawnPoint
-                {
-                    Position = spawn.transform.position,
-                    Rotation = spawn.transform.rotation
-                });
-            }
-
-            VehicleSpawns = vehicleSpawns.ToArray();
-            WeaponSpawns = weaponSpawns.ToArray();
-
-            // STAGE SPAWNS
             for (int i = 0; i < Stages.Length; i++)
             {
                 EditorMapStage stage = Stages[i];
 
-                List<EditorMapSpawnPoint> primary = new List<EditorMapSpawnPoint>();
-                List<EditorMapSpawnPoint> secondary = new List<EditorMapSpawnPoint>();
-                List<EditorMapSpawnPoint> teams = new List<EditorMapSpawnPoint>();
+                List<EditorMapPlayerSpawn> primary = new List<EditorMapPlayerSpawn>();
+                List<EditorMapPlayerSpawn> secondary = new List<EditorMapPlayerSpawn>();
+                List<EditorMapTeamSpawn> teams = new List<EditorMapTeamSpawn>();
 
-                EditorMapPlayerSpawn[] playerSpawns = FindObjectsOfType<EditorMapPlayerSpawn>();
-
-                foreach (var spawn in playerSpawns)
+                foreach (var spawn in FindObjectsOfType<EditorMapPlayerSpawn>())
                 {
                     if (spawn.Stage != i) continue;
-
-                    EditorMapSpawnPoint point = new EditorMapSpawnPoint
-                    {
-                        Position = spawn.transform.position,
-                        Rotation = spawn.transform.rotation
-                    };
-
-                    if (spawn.SpawnType == PlayerSpawnType.Primary) primary.Add(point);
-                    if (spawn.SpawnType == PlayerSpawnType.Secondary) secondary.Add(point);
+                    if (spawn.SpawnType == PlayerSpawnType.Primary) primary.Add(spawn);
+                    if (spawn.SpawnType == PlayerSpawnType.Secondary) secondary.Add(spawn);
                 }
 
-                EditorMapTeamSpawn[] teamSpawns = FindObjectsOfType<EditorMapTeamSpawn>();
-
-                foreach (var spawn in teamSpawns)
+                foreach (var spawn in FindObjectsOfType<EditorMapTeamSpawn>())
                 {
                     if (spawn.Stage != i) continue;
-
-                    teams.Add(new EditorMapSpawnPoint
-                    {
-                        Position = spawn.transform.position,
-                        Rotation = spawn.transform.rotation
-                    });
+                    teams.Add(spawn);
                 }
 
                 stage.PrimaryPlayerSpawns = primary.ToArray();
@@ -134,7 +70,6 @@ namespace GG.BeanBattles.MapEditor
                 stage.TeamSpawns = teams.ToArray();
             }
         }
-
 
         private void OnDrawGizmosSelected()
         {
