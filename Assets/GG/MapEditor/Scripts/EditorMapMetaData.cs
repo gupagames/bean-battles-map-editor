@@ -26,7 +26,7 @@ namespace GG.BeanBattles.MapEditor
     [Serializable]
     public class EditorMapStageMetaData
     {
-        public string DisplayName = "";
+        public string StageName = "";
         public int Width = 0;
         public int Depth = 0;
     }
