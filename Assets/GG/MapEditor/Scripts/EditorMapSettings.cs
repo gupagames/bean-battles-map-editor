@@ -7,8 +7,8 @@ namespace GG.BeanBattles.MapEditor
     public class EditorMapSettings : EditorMapBehaviour
     {
         // VERSION 1
-        [ShowOnly("Your map's id in relation to bean battles.")] public string Id;
-        [ShowOnly("Steams way of determining which workshop map you are.(also called workshop id)")] public string SteamItemId;
+        [ShowOnly("Bean Battles way of identifying your map.")] public string Id;
+        [ShowOnly("Steams way of identifying your workshop map.(also called workshop id)")] public string SteamItemId;
         [ShowOnly("Steams way of determining who made the map.")] public string SteamAuthorId;
 
         [ShowOnly("When the map was first created.")] public string CreationDate;
