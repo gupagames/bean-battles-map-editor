@@ -7,19 +7,30 @@ namespace GG.BeanBattles.MapEditor
     public class EditorMapSettings : EditorMapBehaviour
     {
         // VERSION 1
-        [ShowOnly("Bean Battles way of identifying your map.")] public string Id;
-        [ShowOnly("Steams way of identifying your workshop map.(also called workshop id)")] public string SteamItemId;
-        [ShowOnly("Steams way of determining who made the map.")] public string SteamAuthorId;
+        [ShowOnly("Bean Battles way of identifying your map.")] 
+        public string Id;
 
-        [ShowOnly("When the map was first created.")] public string CreationDate;
-        [ShowOnly("When the map was last changed.")] public string LastUpdate;
+        [ShowOnly("Steams way of identifying your workshop map.(also called workshop id)")] 
+        public string SteamItemId;
+
+        [ShowOnly("Steams way of determining who made the map.")] 
+        public string SteamAuthorId;
+
+        [ShowOnly("When the map was first created.")] 
+        public string CreationDate;
+
+        [ShowOnly("When the map was last changed.")] 
+        public string LastUpdate;
 
         [Tooltip("What you want your map to be named.")]
-        public string MapName = "new-map";
+        public string MapName = "New Map";
+
         [Tooltip("Who is publishing the map.")]
         public string Author = "";
+
         [Tooltip("Brief description of the map describing layout and recommended player size")]
         public string Description = "";
+
         [Tooltip("An image of your map, prefered size 16x9 (ex 1280:720)\n\n" +
             "To know if you have the correct image size the math is (9/16) * a = b\n\n" +
             "Example (9/16) * 1280 = 720\n\n" +
@@ -27,7 +38,7 @@ namespace GG.BeanBattles.MapEditor
         public Texture2D PreviewImage;
 
         [Tooltip("How many stages you want")]
-        public EditorMapStage[] Stages;
+        public EditorMapStage[] Stages = new EditorMapStage[1];
 
         // assigned on load with assignspawns
         // these are only spawned inside the stage bounds
@@ -87,7 +98,7 @@ namespace GG.BeanBattles.MapEditor
                 Gizmos.color = Color.cyan;
                 Gizmos.DrawWireCube(stage.ZoneOffset, stage.ZoneSize);
 
-                EditorMapGizmos.DrawSpawn(stage.ZoneOffset, Quaternion.identity, stage.ZoneSize, Vector3.zero, color, $"Stage {stage.DisplayName}", Vector3.zero);
+                EditorMapGizmos.DrawSpawn(stage.ZoneOffset, Quaternion.identity, stage.ZoneSize, Vector3.zero, color, $"Stage {stage.StageName}", Vector3.zero);
             }
         }
     }

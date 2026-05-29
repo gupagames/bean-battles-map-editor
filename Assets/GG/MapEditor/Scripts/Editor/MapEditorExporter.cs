@@ -20,16 +20,10 @@ namespace GG.BeanBattles.MapEditor
             ZipConstants.DefaultCodePage = 65001;
 
             if (string.IsNullOrEmpty(currentScene.path))
-            {
-                Debug.LogError("Scene must be saved before exporting.");
-                return "";
-            }
+            { Debug.LogError("Scene must be saved before exporting."); return ""; }
 
-            if (!EditorMapValidation.ValidateMap())
-            {
-                Debug.LogError("Failed to export map, validation failed.");
-                return "";
-            }
+            if (!EditorMapValidation.ValidateLoadedMap(currentScene))
+            { Debug.LogError("Failed to export map, validation failed."); return ""; }
 
             // used to assign version
             string versionJson = File.ReadAllText(MapEditorPaths.PackagePath);
@@ -37,10 +31,7 @@ namespace GG.BeanBattles.MapEditor
             float version = -1f; float.TryParse(package.version, out version);
 
             if (version < 1)
-            {
-                Debug.LogError("Failed to get editor version.");
-                return "";
-            }
+            {  Debug.LogError("Failed to get editor version."); return ""; }
 
             // set values if needed, and update last update
             if (string.IsNullOrEmpty(settings.CreationDate)) settings.CreationDate = DateTime.UtcNow.ToString("O");
@@ -101,7 +92,7 @@ namespace GG.BeanBattles.MapEditor
 
                 metadata.Stages[i] = new EditorMapStageMetaData()
                 {
-                    DisplayName = mapStage.DisplayName,
+                    StageName = mapStage.StageName,
                     Width = mapStage.ZoneSize.x,
                     Depth = mapStage.ZoneSize.z,
                 };
