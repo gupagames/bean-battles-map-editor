@@ -41,7 +41,11 @@ namespace GG.BeanBattles.MapEditor
                     break;
             }
 
-            EditorGUI.LabelField(position, label.text, valueStr);
+            var labelCopy = new GUIContent(label.text);
+            var showOnly = (ShowOnlyAttribute)attribute;
+            if (!string.IsNullOrEmpty(showOnly.Tooltip)) labelCopy.tooltip = showOnly.Tooltip;
+
+            EditorGUI.LabelField(position, labelCopy, new GUIContent(valueStr));
         }
     }
 }
