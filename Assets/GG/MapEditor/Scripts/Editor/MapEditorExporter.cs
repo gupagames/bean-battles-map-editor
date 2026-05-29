@@ -14,6 +14,11 @@ namespace GG.BeanBattles.MapEditor
         {
             Scene currentScene = EditorSceneManager.GetActiveScene();
 
+            settings.Lighting = new EditorMapLighting();
+            settings.Lighting.ExportLighting();
+
+            EditorUtility.SetDirty(settings);
+
             EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
             EditorSceneManager.SaveOpenScenes();
 
