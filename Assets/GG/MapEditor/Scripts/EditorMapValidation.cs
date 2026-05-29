@@ -39,7 +39,7 @@ namespace GG.BeanBattles.MapEditor
 
         public static int MaxTriangles = 500000;
         public static int MaxTextureDimension = 4096;
-        public static int MaxRealtimeLights = 32;
+        public static int MaxRealtimeLights = 64;
         public static int MaxMeshCollidersVerts = 255;
         public static int MaxTotalTransforms = 5000;
 
@@ -61,7 +61,7 @@ namespace GG.BeanBattles.MapEditor
             { Debug.LogError("Failed to validate map, MapSettings Invalid"); return false; }
 
             // there will be multiple scenes when loaded in bb, so need to only do map checks for this scene
-            // all editor stuff from mapsettings above should be only one tho
+            // all editor stuff from mapsettings above should be only one the scene, so we dont need to limit where we search
             GameObject[] sceneObjects = GetSceneObjects(mapScene);
 
             // validate Objects / Types
@@ -116,13 +116,13 @@ namespace GG.BeanBattles.MapEditor
             }
 
             // missing files
-            if (!hasBundle) 
+            if (!hasBundle)
             { Debug.LogError("Failed to install, map.bundle missing"); return false; }
 
-            if (!hasJson) 
+            if (!hasJson)
             { Debug.LogError("Failed to install, map.json missing"); return false; }
 
-            if (!hasPreview) 
+            if (!hasPreview)
             { Debug.LogError("Failed to install, preview.png missing"); return false; }
 
 
@@ -193,22 +193,22 @@ namespace GG.BeanBattles.MapEditor
             if (settings == null)
             { Debug.LogError("Failed to validate map settings, null"); return false; }
 
-            // need to be, just in case
+            // make sure that spawns are asssinged
             settings.AssignSpawns();
 
             // has valid id
             if (string.IsNullOrEmpty(settings.Id))
             { Debug.LogError("Failed to validate map settings, Id missing"); return false; }
 
-            // has valid map name, profanity and length
+            // has valid map name, no profanity and proper length
             if (!IsValidDisplayString(settings.MapName, NameMinLength, NameMaxLength))
             { Debug.LogError($"Failed to validate map settings, MapName invalid: {settings.MapName}"); return false; }
 
-            // has valid map author, profanity and length
+            // has valid map author, no profanity and proper length
             if (!IsValidDisplayString(settings.Author, NameMinLength, NameMaxLength))
             { Debug.LogError($"Failed to validate map settings, Author invalid: {settings.Author}"); return false; }
 
-            // has valid description, profanity and length
+            // has valid description, no profanity and proper length
             if (!IsValidDisplayString(settings.Description, DescMinLength, DescMaxLength))
             { Debug.LogError($"Failed to validate map settings, Description invalid: {settings.Description}"); return false; }
 
@@ -235,7 +235,7 @@ namespace GG.BeanBattles.MapEditor
                 if (stage == null)
                 { Debug.LogError($"Failed to validate map settings, Stage[{i}] is null"); return false; }
 
-                // each stage has valid name, profanity and length
+                // has valid description, no profanity and proper length
                 if (!IsValidDisplayString(stage.StageName, NameMinLength, NameMaxLength))
                 { Debug.LogError($"Failed to validate map settings, Stage[{i}] name invalid: {stage.StageName}"); return false; }
 
@@ -302,7 +302,7 @@ namespace GG.BeanBattles.MapEditor
             TextAsset file = Resources.Load<TextAsset>("profanity");
 
             if (file == null)
-            {  Debug.LogWarning("Profanity list not found in Resources."); return new HashSet<string>(); }
+            { Debug.LogWarning("Profanity list not found in Resources."); return new HashSet<string>(); }
 
             return new HashSet<string>(file.text.Split('\n').Select(w => w.Trim().ToLower()).Where(w => !string.IsNullOrWhiteSpace(w)));
         }
@@ -349,7 +349,7 @@ namespace GG.BeanBattles.MapEditor
                 total += mf.sharedMesh.triangles.Length / 3;
             }
             if (total > MaxTriangles)
-            { Debug.LogError($"Failed to validate map, triangle count too high: {total}/{MaxTriangles}"); return false; }
+            { Debug.LogError($"Failed to validate map, mesh triangle count too high: {total}/{MaxTriangles}. You likely have too detailed of objects, please check you models"); return false; }
             return true;
         }
 
@@ -365,7 +365,7 @@ namespace GG.BeanBattles.MapEditor
                     Texture tex = mat.mainTexture;
                     if (tex == null) continue;
                     if (tex.width > MaxTextureDimension || tex.height > MaxTextureDimension)
-                    { Debug.LogError($"Failed to validate map, texture too large: {tex.name} {tex.width}x{tex.height}"); return false; }
+                    { Debug.LogError($"Failed to validate map, texture too large: {tex.name} {tex.width}x{tex.height}, please use a smaller texture."); return false; }
                 }
             }
             return true;
@@ -383,10 +383,9 @@ namespace GG.BeanBattles.MapEditor
                 // client skips this, preferring false negatives over false positives
                 if (light.lightmapBakeType == LightmapBakeType.Realtime) count++;
 #endif
-
             }
             if (count > MaxRealtimeLights)
-            { Debug.LogError($"Failed to validate map, too many realtime lights: {count}/{MaxRealtimeLights}"); return false; }
+            { Debug.LogError($"Failed to validate map, too many realtime lights: {count}/{MaxRealtimeLights}. Please use less lights"); return false; }
             return true;
         }
 
@@ -398,7 +397,7 @@ namespace GG.BeanBattles.MapEditor
                 if (mc == null || mc.sharedMesh == null) continue;
                 int verts = mc.sharedMesh.vertexCount;
                 if (verts > MaxMeshCollidersVerts)
-                { Debug.LogError($"Failed to validate map, MeshCollider too complex: {go.name} {verts}/{MaxMeshCollidersVerts} verts"); return false; }
+                { Debug.LogError($"Failed to validate map, MeshCollider too complex: {go.name} {verts}/{MaxMeshCollidersVerts} verts. Your object colliders are too detailed. Use less detailed models or swap to box etc. colliders."); return false; }
             }
             return true;
         }
@@ -413,12 +412,10 @@ namespace GG.BeanBattles.MapEditor
                 Vector3 pos = go.transform.position;
                 Vector3 scale = go.transform.localScale;
 
-                if (float.IsNaN(pos.x) || float.IsNaN(pos.y) || float.IsNaN(pos.z) ||
-                    float.IsInfinity(pos.x) || float.IsInfinity(pos.y) || float.IsInfinity(pos.z))
+                if (float.IsNaN(pos.x) || float.IsNaN(pos.y) || float.IsNaN(pos.z) || float.IsInfinity(pos.x) || float.IsInfinity(pos.y) || float.IsInfinity(pos.z))
                 { Debug.LogError($"Failed to validate map, invalid position on: {go.name}"); return false; }
 
-                if (float.IsNaN(scale.x) || float.IsNaN(scale.y) || float.IsNaN(scale.z) ||
-                    float.IsInfinity(scale.x) || float.IsInfinity(scale.y) || float.IsInfinity(scale.z))
+                if (float.IsNaN(scale.x) || float.IsNaN(scale.y) || float.IsNaN(scale.z) || float.IsInfinity(scale.x) || float.IsInfinity(scale.y) || float.IsInfinity(scale.z))
                 { Debug.LogError($"Failed to validate map, invalid scale on: {go.name}"); return false; }
             }
             return true;
