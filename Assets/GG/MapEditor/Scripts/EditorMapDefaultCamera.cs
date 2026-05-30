@@ -8,6 +8,9 @@ namespace GG.BeanBattles.MapEditor
 {
     public class EditorMapDefaultCamera : EditorMapBehaviour
     {
+        [Tooltip("Default Camera's field  of view")]
+        [Range(50, 90)] public float FOV = 60;
+        
         private Vector3 _gizmoOffset = new Vector3(0, 0, 0);
         private Vector3 _gizmoSize = new Vector3(1, 1, 1);
         private Vector3 _labelOffset = new Vector3(0, 1.5f, 0);

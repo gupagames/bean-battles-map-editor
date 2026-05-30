@@ -37,13 +37,13 @@ namespace GG.BeanBattles.MapEditor
 
         public static int RequiredWeaponSpawns = 1;
 
-        public static int MaxTriangles = 500000;
+        public static int MaxTriangles = 1000000;
         public static int MaxTextureDimension = 4096;
-        public static int MaxRealtimeLights = 64;
-        public static int MaxMeshCollidersVerts = 255;
-        public static int MaxTotalTransforms = 5000;
+        public static int MaxRealtimeLights = 50;
+        public static int MaxMeshCollidersVerts = 5000;
+        public static int MaxTotalTransforms = 10000;
 
-        public static int MaxParticleSystems = 10;
+        public static int MaxParticleSystems = 50;
         public static int MaxParticlesPerSystem = 1000;
 
         public static bool ValidateLoadedMap(Scene mapScene)
