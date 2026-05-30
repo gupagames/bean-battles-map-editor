@@ -40,6 +40,8 @@ namespace GG.BeanBattles.MapEditor
         [Tooltip("How many stages you want")]
         public EditorMapStage[] Stages = new EditorMapStage[1];
 
+        [HideInInspector] public EditorMapLighting Lighting;
+
         // assigned on load with assignspawns
         // these are only spawned inside the stage bounds
         // so we dont need to assign per stage

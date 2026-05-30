@@ -35,6 +35,12 @@ namespace BeanBattlesMapEditorSteamUploader
             await Task.Delay(1000);
 
             Environment.ExitCode = result ? 0 : 1;
+
+            if (!result)
+            {
+                Console.WriteLine("An issue occurred, press any key to exit...");
+                Console.ReadKey();
+            }
         }
     }
 }

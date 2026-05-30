@@ -102,6 +102,9 @@ namespace GG.BeanBattles.MapEditor
 
             string itemId = MapEditorExporter.UploadToSteamWorkshop(path, settings);
 
+            if (string.IsNullOrEmpty(itemId))
+            { Debug.LogError("Failed to publish map to steam. Check console app logs. Maybe you should be publishing as new item?"); return; }
+
             Debug.Log($"Finished publishing/updating map to steam as workshop item: " + itemId);
         }
 
@@ -123,6 +126,9 @@ namespace GG.BeanBattles.MapEditor
             { Debug.LogError("Failed to export map."); return; }
 
             string itemId = MapEditorExporter.UploadToSteamWorkshop(path, settings);
+
+            if (string.IsNullOrEmpty(itemId))
+            { Debug.LogError("Failed to publish map to steam. Check console app logs."); return; }
 
             Debug.Log($"Finished publishing map to steam as new workshop item with id: " + itemId);
         }

@@ -8,7 +8,7 @@ namespace GG.BeanBattles.MapEditor
 {
     public class EditorMapWinnerStand : EditorMapBehaviour
     {
-        private Vector3 _gizmoOffset = new Vector3(0, 0, 0);
+        private Vector3 _gizmoOffset = new Vector3(0, 1f, 0);
         private Vector3 _gizmoSize = new Vector3(16, 3, 2);
         private Vector3 _labelOffset = new Vector3(0, 2, 0);
 
