@@ -345,7 +345,7 @@ namespace GG.BeanBattles.MapEditor
             foreach (GameObject go in objects)
             {
                 MeshFilter mf = go.GetComponent<MeshFilter>();
-                if (mf == null || mf.sharedMesh == null) continue;
+                if (mf == null || mf.sharedMesh == null || !mf.sharedMesh.isReadable) continue;
                 total += mf.sharedMesh.triangles.Length / 3;
             }
             if (total > MaxTriangles)
@@ -394,7 +394,7 @@ namespace GG.BeanBattles.MapEditor
             foreach (GameObject go in objects)
             {
                 MeshCollider mc = go.GetComponent<MeshCollider>();
-                if (mc == null || mc.sharedMesh == null) continue;
+                if (mc == null || mc.sharedMesh == null || !mc.sharedMesh.isReadable) continue;
                 int verts = mc.sharedMesh.vertexCount;
                 if (verts > MaxMeshCollidersVerts)
                 { Debug.LogError($"Failed to validate map, MeshCollider too complex: {go.name} {verts}/{MaxMeshCollidersVerts} verts. Your object colliders are too detailed. Use less detailed models or swap to box etc. colliders."); return false; }
