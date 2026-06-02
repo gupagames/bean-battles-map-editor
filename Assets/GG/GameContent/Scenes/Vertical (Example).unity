@@ -12779,8 +12779,7 @@ MonoBehaviour:
     - {fileID: 489622050}
     - {fileID: 550541214}
     - {fileID: 608522396}
-    ZoneFinishes:
-    - {fileID: 0}
+    ZoneFinishes: []
     ZoneSize: {x: 200, y: 200, z: 200}
     ZoneOffset: {x: 0, y: 25, z: 0}
   Lighting:
