@@ -281,17 +281,20 @@ namespace GG.BeanBattles.MapEditor
             return true;
         }
 
-
         // HELPERS
         private static bool IsValidDisplayString(string str, int minLength, int maxLength)
         {
             if (string.IsNullOrEmpty(str)) return minLength == 0;
 
-            if (str.Length < minLength || str.Length > maxLength) return false;
+            if (str.Length < minLength || str.Length > maxLength) 
+            { Debug.LogError($"Length invalid({minLength}-{maxLength}): " + str.Length); return false; }
 
             string lowerStr = str.ToLower();
             var words = Regex.Split(lowerStr, @"\W+");
-            if (words.Any(w => ProfanityList.Contains(w))) return false;
+            string detected = words.Where(w => ProfanityList.Contains(w)).FirstOrDefault();
+
+            if (!string.IsNullOrEmpty(detected))
+            { Debug.LogError("Profanity Detected: " + detected); return false; }
 
             return true;
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace GG.BeanBattles.MapEditor
@@ -65,30 +66,18 @@ namespace GG.BeanBattles.MapEditor
             VehicleSpawns = FindObjectsOfType<EditorMapVehicleSpawn>();
             WeaponSpawns = FindObjectsOfType<EditorMapWeaponSpawn>();
 
+            var allPlayerSpawns = FindObjectsOfType<EditorMapPlayerSpawn>();
+            var allTeamSpawns = FindObjectsOfType<EditorMapTeamSpawn>();
+            var allZoneFinishes = FindObjectsOfType<EditorMapZoneFinish>();
+
             for (int i = 0; i < Stages.Length; i++)
             {
                 EditorMapStage stage = Stages[i];
 
-                List<EditorMapPlayerSpawn> primary = new List<EditorMapPlayerSpawn>();
-                List<EditorMapPlayerSpawn> secondary = new List<EditorMapPlayerSpawn>();
-                List<EditorMapTeamSpawn> teams = new List<EditorMapTeamSpawn>();
-
-                foreach (var spawn in FindObjectsOfType<EditorMapPlayerSpawn>())
-                {
-                    if (spawn.Stage != i) continue;
-                    if (spawn.SpawnType == PlayerSpawnType.Primary) primary.Add(spawn);
-                    if (spawn.SpawnType == PlayerSpawnType.Secondary) secondary.Add(spawn);
-                }
-
-                foreach (var spawn in FindObjectsOfType<EditorMapTeamSpawn>())
-                {
-                    if (spawn.Stage != i) continue;
-                    teams.Add(spawn);
-                }
-
-                stage.PrimaryPlayerSpawns = primary.ToArray();
-                stage.SecondaryPlayerSpawns = secondary.ToArray();
-                stage.TeamSpawns = teams.ToArray();
+                stage.PrimaryPlayerSpawns = allPlayerSpawns.Where(s => s.Stage == i && s.SpawnType == PlayerSpawnType.Primary).ToArray();
+                stage.SecondaryPlayerSpawns = allPlayerSpawns.Where(s => s.Stage == i && s.SpawnType == PlayerSpawnType.Secondary).ToArray();
+                stage.TeamSpawns = allTeamSpawns.Where(s => s.Stage == i).ToArray();
+                stage.ZoneFinishes = allZoneFinishes.Where(f => f.Stage == i).ToArray();
             }
         }
 

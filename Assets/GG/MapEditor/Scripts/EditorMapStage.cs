@@ -19,6 +19,7 @@ namespace GG.BeanBattles.MapEditor
         [HideInInspector] public EditorMapPlayerSpawn[] PrimaryPlayerSpawns;
         [HideInInspector] public EditorMapPlayerSpawn[] SecondaryPlayerSpawns;
         [HideInInspector] public EditorMapTeamSpawn[] TeamSpawns;
+        [HideInInspector] public EditorMapZoneFinish[] ZoneFinishes;
 
         [Tooltip("How big you want the death zone on the outside to be.")]
         public Vector3Int ZoneSize = new Vector3Int(100, 300, 100);
