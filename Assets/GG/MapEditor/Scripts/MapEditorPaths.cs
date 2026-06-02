@@ -8,6 +8,7 @@ namespace GG.BeanBattles.MapEditor
         public static string EditorMapsPath = Path.Combine(Application.persistentDataPath, "EditorMaps");
         public static string EditorMapsCachePath = Path.Combine(Application.persistentDataPath, "Cache");
         public static string EditorMapExtension = ".bbmap";
+        public static string EditorProjectExtension = ".bbmapproject";
 
         public static string TemplatePath = Path.Combine(Application.dataPath, "GG/MapEditor/Scenes/Templete.unity");
         public static string PackagePath = Path.Combine(Application.dataPath, "GG/MapEditor/package.json");

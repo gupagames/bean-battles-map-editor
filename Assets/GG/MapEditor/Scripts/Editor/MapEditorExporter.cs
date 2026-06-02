@@ -1,10 +1,11 @@
 ﻿using ICSharpCode.SharpZipLib.Zip;
 using System;
+using System.Collections.Generic;
 using System.IO;
-using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEditor;
 using UnityEditor.SceneManagement;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace GG.BeanBattles.MapEditor
 {
@@ -16,6 +17,8 @@ namespace GG.BeanBattles.MapEditor
 
             settings.Lighting = new EditorMapLighting();
             settings.Lighting.ExportLighting();
+
+            settings.AssignSpawns();
 
             EditorUtility.SetDirty(settings);
 
@@ -129,6 +132,63 @@ namespace GG.BeanBattles.MapEditor
             }
         }
 
+        public static bool ExportProject(EditorMapSettings settings, string path)
+        {
+            Scene currentScene = EditorSceneManager.GetActiveScene();
+            settings.Lighting = new EditorMapLighting();
+            settings.Lighting.ExportLighting();
+            EditorUtility.SetDirty(settings);
+            EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
+            EditorSceneManager.SaveOpenScenes();
+
+            if (string.IsNullOrEmpty(currentScene.path))
+            { Debug.LogError("Scene must be saved before exporting."); return false; }
+
+            if (!EditorMapValidation.ValidateLoadedMap(currentScene))
+            { Debug.LogError("Failed to export project, validation failed."); return false; }
+
+            // collect asset
+            GameObject[] rootObjects = currentScene.GetRootGameObjects();
+            UnityEngine.Object[] dependencies = EditorUtility.CollectDependencies(rootObjects);
+            HashSet<string> userAssetPaths = new HashSet<string>();
+
+            foreach (var dep in dependencies)
+            {
+                string assetPath = AssetDatabase.GetAssetPath(dep);
+                if (!IsUserAsset(assetPath)) continue;
+                userAssetPaths.Add(assetPath);
+            }
+
+            // create project folder
+            string projectPath = Path.Combine(path, settings.MapName + MapEditorPaths.EditorProjectExtension);
+            if (Directory.Exists(projectPath)) Directory.Delete(projectPath, true);
+            Directory.CreateDirectory(projectPath);
+
+            // copy scene and meta
+            string sceneName = Path.GetFileName(currentScene.path);
+            File.Copy(currentScene.path, Path.Combine(projectPath, sceneName), true);
+
+            string sceneMeta = currentScene.path + ".meta";
+            if (File.Exists(sceneMeta)) File.Copy(sceneMeta, Path.Combine(projectPath, sceneName + ".meta"), true);
+     
+            // copy assets AND metas
+            foreach (string assetPath in userAssetPaths)
+            {
+                string destPath = Path.Combine(projectPath, assetPath);
+                Directory.CreateDirectory(Path.GetDirectoryName(destPath));
+                File.Copy(assetPath, destPath, true);
+
+                // Copy meta file
+                string metaSource = assetPath + ".meta";
+                string metaDest = destPath + ".meta";
+
+                if (File.Exists(metaSource)) File.Copy(metaSource, metaDest, true);
+            }
+
+            EditorUtility.RevealInFinder(projectPath);
+            return true;
+        }
+
         public static string UploadToSteamWorkshop(string path, EditorMapSettings settings)
         {
             Debug.Log("Running Steam Uploader exe...");
@@ -179,6 +239,15 @@ namespace GG.BeanBattles.MapEditor
                 byte[] bytes = sha.ComputeHash(System.Text.Encoding.UTF8.GetBytes(input));
                 return BitConverter.ToString(bytes).Replace("-", "").ToLower();
             }
+        }
+
+        private static bool IsUserAsset(string assetPath)
+        {
+            if (string.IsNullOrEmpty(assetPath)) return false;
+            if (!assetPath.StartsWith("Assets/")) return false; // doesnt start with assets
+            if (assetPath.StartsWith("Assets/GG/")) return false;  // does start with assets/gg
+
+            return true;
         }
     }
 }

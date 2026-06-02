@@ -55,7 +55,7 @@ namespace GG.BeanBattles.MapEditor
             Debug.Log("Map validation successful.");
         }
 
-        [MenuItem("GG/Map Editor/Export Local/As bbmap File")]
+        [MenuItem("GG/Map Editor/Export/As Map")]
         public static void ExportMap()
         {
             Debug.Log($"Exporting map as bbmap file...");
@@ -70,7 +70,7 @@ namespace GG.BeanBattles.MapEditor
             Debug.Log($"Finished exporting map as bbmap file to path: " + path);
         }
 
-        [MenuItem("GG/Map Editor/Export Local/As New bbmap File")]
+        [MenuItem("GG/Map Editor/Export/As New Map")]
         public static void ExportAsNewMap()
         {
             Debug.Log($"Exporting map as new bbmap file...");
@@ -88,7 +88,45 @@ namespace GG.BeanBattles.MapEditor
             Debug.Log($"Finished exporting map as new bbmap file to path: " + path);
         }
 
-        [MenuItem("GG/Map Editor/Publish To Steam/As Workshop Item")]
+        [MenuItem("GG/Map Editor/Export/As Project")]
+        public static void ExportProject()
+        {
+            Debug.Log($"Exporting as bbmapproject...");
+            EditorMapSettings settings = UnityEngine.Object.FindObjectOfType<EditorMapSettings>();
+            if (settings == null) { Debug.LogError("Failed to export project, no MapSettings found."); return; }
+
+            string path = EditorUtility.OpenFolderPanel("Export bbmapproject", "", "");
+
+            if (string.IsNullOrEmpty(path))
+            { Debug.LogError("Failed to export bbmapproject. path null"); return; }
+
+            bool result = MapEditorExporter.ExportProject(settings, path);
+
+            if (!result)
+            { Debug.LogError("Failed to export bbmapproject."); return; }
+
+            Debug.Log($"Finished exporting bbmapproject to path: " + path);
+        }
+
+        [MenuItem("GG/Map Editor/Import/From Project")]
+        public static void ImportProject()
+        {
+            Debug.Log($"Importing bbmapproject...");
+
+            string path = EditorUtility.OpenFolderPanel("Import bbmapproject", "", "");
+
+            if (string.IsNullOrEmpty(path))
+            { Debug.LogError("Failed to import bbmapproject. path null"); return; }
+
+            bool result = MapEditorImporter.ImportProject(path);
+
+            if (!result)
+            { Debug.LogError("Failed to import bbmapproject."); return; }
+
+            Debug.Log($"Finished importing bbmapproject");
+        }
+
+        [MenuItem("GG/Map Editor/Publish/As Steam Workshop Item")]
         public static void PublishMapToSteam()
         {
             Debug.Log($"Publishing map to steam as workshop item...");
@@ -108,7 +146,7 @@ namespace GG.BeanBattles.MapEditor
             Debug.Log($"Finished publishing/updating map to steam as workshop item: " + itemId);
         }
 
-        [MenuItem("GG/Map Editor/Publish To Steam/As New Workshop Item")]
+        [MenuItem("GG/Map Editor/Publish/As New Steam Workshop Item")]
         public static void PublishAsNewMapToSteam()
         {
             Debug.Log($"Publishing map to steam as new workshop item...");
