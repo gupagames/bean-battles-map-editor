@@ -4,6 +4,11 @@
 [**Tutorial**](##tutorial) ·
 [**Contributing**](##contributing)
 
+[**Steam**](https://store.steampowered.com/app/765410/Bean_Battles/) ·
+[**Workshop**](https://steamcommunity.com/app/765410/workshop/) ·
+[**Discord**](https://discord.gg/YOURINVITE) ·
+[**X**](https://x.com/BeanBattlesGame)
+
 ## Overview
 
 A Unity based map editor for Bean Battles.
@@ -64,6 +69,7 @@ You can structure your map however you like, but the default map (recommended) i
    * Weapon Spawns (1 required): Spawn points for weapons. If you have fewer spawns than weapons, multiple weapons will drop on one spawn.
    * Winner Stand (1 required): Where the end podium will be located.
    * Default Camera (1 required): Where the lobby camera will be located.
+   * Zone Finish (optional): Where the end zone will be located. Picked randomly if multiple. If none are created(default) it will just pick a random location inside the zone.
 
    #### Note: Make sure spawns do not clip into any colliders to avoid complications.
 
@@ -88,6 +94,12 @@ You can export/publish your map from the toolbar: `GG > Map Editor > Export/Publ
 3. You can also export/import your map projects. If you do this, any assets you add must be outside the `GG` folder.
 
 #### Note: If you are unable to export/publish your project, map validation is likely failing. Read the error messages to understand what you need to fix.
+
+### Additional Notes
+
+* Baked lighting is fully supported and recommended for better performance and visuals.
+* Player, team, and zone finishes are tied to stages.
+* Weapon spawns and vehicle spawns are universal across the map. Only spawns located inside the stages zone will be used.
 
 ## Contributing
 

@@ -20,7 +20,8 @@ namespace GG.BeanBattles.MapEditor
             typeof(EditorMapBehaviour),
             typeof(Tree),
             typeof(AudioSource),
-            typeof(ParticleSystem)
+            typeof(ParticleSystem),
+            typeof(Terrain)
         };
 
         public static readonly HashSet<string> ProfanityList = LoadProfanityList();
