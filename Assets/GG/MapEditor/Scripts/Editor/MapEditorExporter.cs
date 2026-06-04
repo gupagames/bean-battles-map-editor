@@ -39,7 +39,7 @@ namespace GG.BeanBattles.MapEditor
             float version = -1f; float.TryParse(package.version, out version);
 
             if (version < 1)
-            {  Debug.LogError("Failed to get editor version."); return ""; }
+            { Debug.LogError("Failed to get editor version."); return ""; }
 
             // set values if needed, and update last update
             if (string.IsNullOrEmpty(settings.CreationDate)) settings.CreationDate = DateTime.UtcNow.ToString("O");
@@ -170,7 +170,7 @@ namespace GG.BeanBattles.MapEditor
 
             string sceneMeta = currentScene.path + ".meta";
             if (File.Exists(sceneMeta)) File.Copy(sceneMeta, Path.Combine(projectPath, sceneName + ".meta"), true);
-     
+
             // copy assets AND metas
             foreach (string assetPath in userAssetPaths)
             {
@@ -191,45 +191,29 @@ namespace GG.BeanBattles.MapEditor
 
         public static string UploadToSteamWorkshop(string path, EditorMapSettings settings)
         {
-            Debug.Log("Running Steam Uploader exe...");
+            Debug.Log("Running Steam Uploader...");
 
-            if (!File.Exists(MapEditorPaths.UploaderPath))
-            { Debug.LogError("Failed to find uploader exe."); return ""; }
+            var result = SteamWorkshopManager.PublishMap(path);
 
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
+            // if we wait async, it will break
+            // so just wait syncronusly
+            // while(!task.IsCompleted) { }
 
-            process.StartInfo.FileName = MapEditorPaths.UploaderPath;
-            process.StartInfo.Arguments = $"\"{path}\"";
-
-            process.Start();
-
-            while (!process.HasExited) continue;
-
-            if (process.ExitCode != 0)
-            { Debug.LogError("Steam upload failed."); return ""; }
+            // var result = task.Result;
 
             // the upload succeeded, we should update our gamesettings.. we have to find it again
             settings = UnityEngine.Object.FindObjectOfType<EditorMapSettings>();
-            if (settings == null) { Debug.LogError("Failed to export map, no MapSettings found."); return ""; }
+            if (settings == null) { Debug.LogError("Failed to assign steamId after publish, no MapSettings found."); return ""; }
 
-            string jsonPath = Path.Combine(path, "map.json");
-
-            if (!File.Exists(jsonPath))
-            { Debug.LogError("Failed to reload map json."); return ""; }
-
-            string json = File.ReadAllText(jsonPath);
-
-            EditorMapMetaData metaData = JsonUtility.FromJson<EditorMapMetaData>(json);
-
-            settings.SteamItemId = metaData.SteamItemId;
-            settings.SteamAuthorId = metaData.SteamAuthorId;
+            settings.SteamItemId = result.SteamItemId;
+            settings.SteamAuthorId = result.SteamAuthorId;
 
             EditorUtility.SetDirty(settings);
 
             Application.OpenURL($"steam://url/CommunityFilePage/{settings.SteamItemId}");
             Debug.Log("Steam upload complete.");
 
-            return metaData.SteamItemId;
+            return result.SteamItemId;
         }
 
         private static string ComputeSHA256(string input)
