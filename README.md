@@ -85,6 +85,8 @@ GG/GameContent/Scenes/...
 
 You can export/publish your map from the toolbar: `GG > Map Editor > Export/Publish`
 
+#### Note: When exporting/publishing, there are options `As New`. This means your map will be considered new. For example, if you select `Publish > As Workshop Item` it will update an existing map if one exists. If you select `Publish > As New Workshop Item` it will force create a new map.
+
 1. **Export > As Map**
    Saves the map locally to your Bean Battles map directory. You can share this `.bbmap` file with friends. They will need to place it in their map directory folder, which can be accessed from Bean Battles.
 
