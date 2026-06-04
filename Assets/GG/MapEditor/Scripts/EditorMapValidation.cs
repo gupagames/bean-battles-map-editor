@@ -94,9 +94,9 @@ namespace GG.BeanBattles.MapEditor
 
                 return true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                Debug.LogError("Failed to validate map, " + e); 
+                Debug.LogError("Failed to validate map, " + e);
                 return false;
             }
         }
@@ -142,12 +142,12 @@ namespace GG.BeanBattles.MapEditor
                 string jsonPath = System.IO.Path.Combine(path, "map.json");
                 return ValidateMetaData(jsonPath);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                Debug.LogError("Failed to validate map install, " + e); 
+                Debug.LogError("Failed to validate map install, " + e);
                 return false;
             }
-}
+        }
 
         public static bool ValidateMetaData(string jsonPath, string hash = "")
         {
@@ -169,9 +169,9 @@ namespace GG.BeanBattles.MapEditor
 
                 return ValidateMetaData(meta, hash);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                Debug.LogError("Failed to validate map metadata, " + e); 
+                Debug.LogError("Failed to validate map metadata, " + e);
                 return false;
             }
         }
@@ -330,7 +330,7 @@ namespace GG.BeanBattles.MapEditor
         {
             if (string.IsNullOrEmpty(str)) return minLength == 0;
 
-            if (str.Length < minLength || str.Length > maxLength) 
+            if (str.Length < minLength || str.Length > maxLength)
             { Debug.LogError($"Length invalid({minLength}-{maxLength}): " + str.Length); return false; }
 
             string lowerStr = str.ToLower();

@@ -1,9 +1,7 @@
 ﻿using ICSharpCode.SharpZipLib.Zip;
-using Steamworks;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -41,7 +39,7 @@ namespace GG.BeanBattles.MapEditor
             float version = -1f; float.TryParse(package.version, out version);
 
             if (version < 1)
-            {  Debug.LogError("Failed to get editor version."); return ""; }
+            { Debug.LogError("Failed to get editor version."); return ""; }
 
             // set values if needed, and update last update
             if (string.IsNullOrEmpty(settings.CreationDate)) settings.CreationDate = DateTime.UtcNow.ToString("O");
@@ -172,7 +170,7 @@ namespace GG.BeanBattles.MapEditor
 
             string sceneMeta = currentScene.path + ".meta";
             if (File.Exists(sceneMeta)) File.Copy(sceneMeta, Path.Combine(projectPath, sceneName + ".meta"), true);
-     
+
             // copy assets AND metas
             foreach (string assetPath in userAssetPaths)
             {

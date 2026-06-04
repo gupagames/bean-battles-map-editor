@@ -1,6 +1,5 @@
 ﻿using GG.BeanBattles.MapEditor;
 using Steamworks;
-using System;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -72,7 +71,7 @@ namespace GG.BeanBattles
                 _createItemResult.Set(createHandle);
                 if (!WaitUntilDone(ref createDone, "Creating workshop item...", 2f))
 
-                if (createDone == false) { Debug.LogError("Failed to create workshop item."); return result; }
+                    if (createDone == false) { Debug.LogError("Failed to create workshop item."); return result; }
 
                 metaData.SteamItemId = workshopId.m_PublishedFileId.ToString();
                 metaData.SteamAuthorId = SteamUser.GetSteamID().m_SteamID.ToString();
@@ -114,7 +113,7 @@ namespace GG.BeanBattles
             _submitItemUpdate.Set(submitHandle);
             if (!WaitUntilDone(ref updateDone, "Updating workshop item...", 5f))
 
-            if (updateDone == false) { Debug.LogError("Workshop update failed."); return result; }
+                if (updateDone == false) { Debug.LogError("Workshop update failed."); return result; }
 
             Debug.Log($"Workshop update complete: {metaData.MapName}");
 
