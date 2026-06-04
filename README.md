@@ -6,7 +6,7 @@
 
 [**Steam**](https://store.steampowered.com/app/765410/Bean_Battles/) ·
 [**Workshop**](https://steamcommunity.com/app/765410/workshop/) ·
-[**Discord**](https://discord.gg/YOURINVITE) ·
+[**Discord**](https://discord.gg/cK2rCdw) ·
 [**X**](https://x.com/BeanBattlesGame)
 
 ## Overview
@@ -19,7 +19,7 @@ It includes built in Bean Battles assets, map validation, Steam Workshop support
 Shout out to flarfo for the help and original idea.
 
 ## Tutorial
-#### Video Tutorial : https://www.youtube.com/@gupagames/videos
+#### Video Tutorial : https://youtu.be/qD4CCkbeGj0
 ### Getting Started
 
 1. Download and extract the latest editor release zip: https://github.com/gupagames/bean-battles-map-editor/releases
@@ -27,6 +27,9 @@ Shout out to flarfo for the help and original idea.
 3. Download Unity Hub: https://docs.unity.com/en-us/hub
 4. Open Unity Hub and import the project from step 1.
 5. Download the correct Unity editor version: https://unity.com/releases/editor/whats-new/2017.2.3f1#installs
+
+#### Note: You can install the correct version via UnityHub or the link. If you install via the link you might have to locate the install.
+
 6. Open the project.
 
 #### Note: The first time opening the project may take some time.
@@ -93,6 +96,8 @@ You can export/publish your map from the toolbar: `GG > Map Editor > Export/Publ
 2. **Publish > As Workshop Item**
    Publishes your map to the Steam Workshop where anyone can subscribe to it. This is recommended once your map is finished.
 
+#### Note: Players will automatically download and subscribe to maps on the Steam Workshop when joining a server. Players cannot join servers running local maps unless they already have those maps downloaded.
+
 3. You can also export/import your map projects. If you do this, any assets you add must be outside the `GG` folder.
 
 #### Note: If you are unable to export/publish your project, map validation is likely failing. Read the error messages to understand what you need to fix.
@@ -102,6 +107,8 @@ You can export/publish your map from the toolbar: `GG > Map Editor > Export/Publ
 * Baked lighting is fully supported and recommended for better performance and visuals.
 * Player, team, and zone finishes are tied to stages.
 * Weapon spawns and vehicle spawns are universal across the map. Only spawns located inside the stages zone will be used.
+
+If you have any questions, or want to request something, feel free to come talk about it in the discord: https://discord.gg/cK2rCdw
 
 ## Contributing
 
