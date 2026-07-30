@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -169,6 +170,115 @@ namespace GG.BeanBattles.MapEditor
             { Debug.LogError("Failed to publish map to steam. Check console app logs."); return; }
 
             Debug.Log($"Finished publishing map to steam as new workshop item with id: " + itemId);
+        }
+
+
+        [MenuItem("GG/Map Editor/Debug/Change Map Id")]
+        public static void ChangeMapId()
+        {
+
+            ShowStringInput("Change Map Id", "Enter Map Id (Only change this if something is broken):", value =>
+            {
+                EditorMapSettings settings = UnityEngine.Object.FindObjectOfType<EditorMapSettings>();
+                if (settings == null) { Debug.LogError("Failed to change map id, no MapSettings found."); return; }
+
+                Undo.RecordObject(settings, "Change Map Id");
+                settings.Id = value;
+                EditorUtility.SetDirty(settings);
+
+                Debug.Log($"Map Id changed to: {value}. Save the scene to finalize.");
+            });
+        }
+
+        [MenuItem("GG/Map Editor/Debug/Change Map Steam Item Id")]
+        public static void ChangeMapSteamItemId()
+        {
+            ShowStringInput("Change Map Steam Item Id", "Enter Steam Item Id (Only change this if something is broken):", value =>
+            {
+                EditorMapSettings settings = UnityEngine.Object.FindObjectOfType<EditorMapSettings>();
+                if (settings == null) { Debug.LogError("Failed to change steam item id, no MapSettings found."); return; }
+
+                Undo.RecordObject(settings, "Change Map Steam Item Id");
+                settings.SteamItemId = value;
+                EditorUtility.SetDirty(settings);
+
+                Debug.Log($"Steam Item Id changed to: {value}. Save the scene to finalize.");
+            });
+        }
+
+        [MenuItem("GG/Map Editor/Debug/Change Map Steam Author Id")]
+        public static void ChangeMapSteamAuthorId()
+        {
+            ShowStringInput("Change Map Steam Author Id", "Enter Steam Author Id (Only change this if something is broken):", value =>
+            {
+                EditorMapSettings settings = UnityEngine.Object.FindObjectOfType<EditorMapSettings>();
+                if (settings == null) { Debug.LogError("Failed to change author id, no MapSettings found."); return; }
+
+                Undo.RecordObject(settings, "Change Map Steam Author Id");
+                settings.SteamAuthorId = value;
+                EditorUtility.SetDirty(settings);
+
+                Debug.Log($"Steam Author Id changed to: {value}. Save the scene to finalize.");
+            });
+        }
+
+        private static void ShowStringInput(string title, string label, Action<string> onConfirm)
+        {
+            StringInputWindow.Show(title, label, onConfirm);
+        }
+
+        private class StringInputWindow : EditorWindow
+        {
+            private string label;
+            private string value;
+            private Action<string> onConfirm;
+
+            public static void Show(string title, string label, Action<string> onConfirm)
+            {
+                var window = CreateInstance<StringInputWindow>();
+
+                window.titleContent = new GUIContent(title);
+                window.label = label;
+                window.onConfirm = onConfirm;
+
+                window.minSize = new Vector2(400, 75);
+                window.maxSize = new Vector2(400, 75);
+
+                window.ShowUtility();
+            }
+
+            private void OnGUI()
+            {
+                EditorGUILayout.LabelField(label);
+
+                GUI.SetNextControlName("InputField");
+                value = EditorGUILayout.TextField(value);
+
+                GUILayout.Space(10);
+
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    if (GUILayout.Button("Cancel"))
+                    {
+                        Close();
+                    }
+
+                    if (GUILayout.Button("OK"))
+                    {
+                        onConfirm?.Invoke(value);
+                        Close();
+                    }
+                }
+
+                if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Return)
+                {
+                    onConfirm?.Invoke(value);
+                    Close();
+                    Event.current.Use();
+                }
+
+                EditorGUI.FocusTextInControl("InputField");
+            }
         }
     }
 }
