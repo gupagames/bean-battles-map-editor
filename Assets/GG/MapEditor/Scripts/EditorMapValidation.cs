@@ -49,6 +49,8 @@ namespace GG.BeanBattles.MapEditor
         public static int MinZoneSize = 1;
         public static int MaxZoneSize = 1000;
 
+        public static int BuiltInLayerMax = 8;
+
         public static bool ValidateLoadedMap(Scene mapScene)
         {
             try
@@ -91,6 +93,10 @@ namespace GG.BeanBattles.MapEditor
 
                 if (!ValidateParticleSystems(sceneObjects))
                 { Debug.LogError("Failed to validate map, particle systems invalid"); return false; }
+
+                // LAYERS, this is just a warning
+                if (SceneHasCustomLayers(mapScene))
+                    Debug.LogWarning("This Map is using custom layers, this is fine, but these layers will be set to Default (0) when loaded in Bean Battles.");
 
                 return true;
             }
@@ -323,6 +329,46 @@ namespace GG.BeanBattles.MapEditor
                 Debug.LogError("Failed to validate map mappsettings, " + e);
                 return false;
             }
+        }
+
+        // LAYERS
+
+        // Sets custom layers back to Default (0).
+        // Prevents usage of Bean Battles custom layers in the editor map scene.
+        public static void FixSceneCustomLayers(Scene scene)
+        {
+            foreach (GameObject root in scene.GetRootGameObjects())
+                SetLayerRecursively(root);
+        }
+
+        public static bool SceneHasCustomLayers(Scene scene)
+        {
+            foreach (GameObject root in scene.GetRootGameObjects())
+                if (HasCustomLayerRecursively(root))
+                    return true;
+
+            return false;
+        }
+
+        private static void SetLayerRecursively(GameObject obj)
+        {
+            if (obj.layer >= BuiltInLayerMax)
+                obj.layer = 0;
+
+            foreach (Transform child in obj.transform)
+                SetLayerRecursively(child.gameObject);
+        }
+
+        private static bool HasCustomLayerRecursively(GameObject obj)
+        {
+            if (obj.layer >= BuiltInLayerMax)
+                return true;
+
+            foreach (Transform child in obj.transform)
+                if (HasCustomLayerRecursively(child.gameObject))
+                    return true;
+
+            return false;
         }
 
         // HELPERS
