@@ -12752,7 +12752,7 @@ MonoBehaviour:
   PreviewImage: {fileID: 2800000, guid: 33c6341fab948d94f8b5c7297e6f98e3, type: 3}
   Stages:
   - StageName: Default
-    WeaponSpawns: 35
+    WeaponSpawns: 40
     VehicleSpawns: 1
     PrimaryPlayerSpawns:
     - {fileID: 273268372}
