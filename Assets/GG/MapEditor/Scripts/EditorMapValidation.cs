@@ -119,6 +119,14 @@ namespace GG.BeanBattles.MapEditor
                 if (!System.IO.Directory.Exists(path))
                 { Debug.LogError($"Failed to install, directory not found: {path}"); return false; }
 
+                // any subdirectories at all = invalid, since only 3 flat files are allowed
+                var subdirs = System.IO.Directory.GetDirectories(path, "*", System.IO.SearchOption.AllDirectories);
+                if (subdirs.Length > 0)
+                {
+                    Debug.LogError($"Failed to install, unexpected folder found: {subdirs[0]}");
+                    return false;
+                }
+
                 var files = System.IO.Directory.GetFiles(path);
                 bool hasBundle = false;
                 bool hasJson = false;
@@ -143,7 +151,6 @@ namespace GG.BeanBattles.MapEditor
 
                 if (!hasPreview)
                 { Debug.LogError("Failed to install, preview.png missing"); return false; }
-
 
                 string jsonPath = System.IO.Path.Combine(path, "map.json");
                 return ValidateMetaData(jsonPath);

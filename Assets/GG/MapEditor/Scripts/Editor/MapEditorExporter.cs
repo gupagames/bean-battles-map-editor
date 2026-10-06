@@ -221,7 +221,7 @@ namespace GG.BeanBattles.MapEditor
             using (var sha = System.Security.Cryptography.SHA256.Create())
             {
                 byte[] bytes = sha.ComputeHash(System.Text.Encoding.UTF8.GetBytes(input));
-                return BitConverter.ToString(bytes).Replace("-", "").ToLower();
+                return BitConverter.ToString(bytes).Replace("-", "").ToLowerInvariant();
             }
         }
 
